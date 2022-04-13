@@ -7,10 +7,8 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <div className='container'>
-        <Services />
-        <Experts />
-      </div>
+      <Services />
+      <Experts />
     </>
   )
 }
