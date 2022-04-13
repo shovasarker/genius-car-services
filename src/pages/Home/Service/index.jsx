@@ -15,7 +15,7 @@ const Service = ({ service }) => {
         </p>
         <p className='service-description'>{description}</p>
         <button
-          onClick={() => navigate(`service/${id}`)}
+          onClick={() => navigate(`/service/${id}`)}
           className='service-btn'
         >
           Book {name}

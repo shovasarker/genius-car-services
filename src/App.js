@@ -10,6 +10,7 @@ import ServiceDetail from './pages/ServiceDetail'
 import NotFound from './pages/NotFound'
 import Login from './pages/Login/Login'
 import Register from './pages/Login/Register'
+import RequireAuth from './pages/Shared/RequireAuth'
 
 function App() {
   return (
@@ -19,7 +20,14 @@ function App() {
         <Route />
         <Route path='/' element={<Home />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/service/:serviceId' element={<ServiceDetail />} />
+        <Route
+          path='/service/:serviceId'
+          element={
+            <RequireAuth>
+              <ServiceDetail />
+            </RequireAuth>
+          }
+        />
         <Route path='/about' element={<About />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
