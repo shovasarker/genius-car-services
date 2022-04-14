@@ -1,33 +1,46 @@
-import React, { useRef } from 'react'
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import React, { useRef, useState } from 'react'
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from 'react-firebase-hooks/auth'
 import { Button, Container, Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import auth from '../../../firebase/firebase.init.js'
+import SocialLogin from '../SocialLogin'
+import Loading from '../../Shared/Loading/index.jsx'
 
 const Register = () => {
+  const [agree, setAgree] = useState(false)
   const nameRef = useRef('')
   const emailRef = useRef('')
   const passwordRef = useRef('')
   const navigate = useNavigate()
 
-  const [createUserWithEmailAndPAssword, user] =
-    useCreateUserWithEmailAndPassword(auth)
+  const [createUserWithEmailAndPAssword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true })
 
-  // const [updateProfle] = useUpdateProfile(auth)
+  const [updateProfile] = useUpdateProfile(auth)
 
   if (user) {
-    // updateProfle({ displayName: nameRef.current.value })
-    navigate('/home')
+    console.log(user?.user)
+    navigate('/')
   }
 
-  const handleRegister = (e) => {
+  if (loading) {
+    return <Loading />
+  }
+
+  const handleRegister = async (e) => {
     e.preventDefault()
     e.preventDefault()
+    const displayName = nameRef.current.value
     const email = emailRef.current.value
     const password = passwordRef.current.value
 
     if (!email || !password) return
-    createUserWithEmailAndPAssword(email, password)
+    await createUserWithEmailAndPAssword(email, password)
+    await updateProfile({ displayName })
+    console.log('profile updated')
   }
 
   return (
@@ -55,9 +68,6 @@ const Register = () => {
               placeholder='Enter email'
               required
             />
-            <Form.Text className='text-muted'>
-              We'll never share your email with anyone else.
-            </Form.Text>
           </Form.Group>
 
           <Form.Group className='mb-3' controlId='formBasicPassword'>
@@ -70,22 +80,34 @@ const Register = () => {
             />
           </Form.Group>
           <Form.Group className='mb-3' controlId='formBasicCheckbox'>
-            <Form.Check type='checkbox' label='Check me out' />
+            <Form.Check
+              type='checkbox'
+              checked={agree}
+              onChange={() => setAgree(!agree)}
+              label='Accept Genius Car Terms and Conditions'
+              className={`${!agree && 'text-danger'}`}
+            />
           </Form.Group>
-          <Button className='w-full' variant='primary' type='submit'>
+          <Button
+            className='w-100'
+            variant='primary'
+            type='submit'
+            disabled={!agree}
+          >
             Register
           </Button>
         </Form>
-        <div className='mt-4 d-flex flex-row align-items-center gx-1'>
+        <div className='mt-4 d-flex flex-row justify-content-center align-items-center gx-1'>
           Already have an account ?{' '}
           <Button
             variant='link'
-            className='text-warning p-0 text-decoration-none ms-1'
+            className='text-primary p-0 text-decoration-none ms-1'
             onClick={() => navigate('/login')}
           >
             Please Login
           </Button>
         </div>
+        <SocialLogin emailError={error} />
       </div>
     </Container>
   )

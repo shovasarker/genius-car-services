@@ -19,7 +19,6 @@ function App() {
       <Routes>
         <Route />
         <Route path='/' element={<Home />} />
-        <Route path='/home' element={<Home />} />
         <Route
           path='/service/:serviceId'
           element={

@@ -8,7 +8,7 @@ const Services = () => {
 
   useEffect(() => {
     const getServices = async () => {
-      const res = await fetch('services.json')
+      const res = await fetch('./services.json')
       const data = await res.json()
       setServices(data)
     }
