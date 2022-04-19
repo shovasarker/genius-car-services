@@ -17,7 +17,6 @@ function App() {
     <div>
       <Header />
       <Routes>
-        <Route />
         <Route path='/' element={<Home />} />
         <Route
           path='/service/:serviceId'

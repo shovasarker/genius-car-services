@@ -9,6 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import auth from '../../../firebase/firebase.init'
 import Loading from '../../Shared/Loading'
+import PageTitle from '../../Shared/PageTitle'
 import SocialLogin from '../SocialLogin'
 
 const Login = () => {
@@ -54,6 +55,7 @@ const Login = () => {
 
   return (
     <Container>
+      <PageTitle title='Login' />
       <div className='mx-auto border my-4 px-2 py-4' style={{ width: '340px' }}>
         <h2 className='text-center'>Login</h2>
         <Form onSubmit={handleLogin}>

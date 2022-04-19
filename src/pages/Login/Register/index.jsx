@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import auth from '../../../firebase/firebase.init.js'
 import SocialLogin from '../SocialLogin'
 import Loading from '../../Shared/Loading/index.jsx'
+import PageTitle from '../../Shared/PageTitle/index.jsx'
 
 const Register = () => {
   const [agree, setAgree] = useState(false)
@@ -45,6 +46,7 @@ const Register = () => {
 
   return (
     <Container>
+      <PageTitle title='Register' />
       <div
         className=' mx-auto border my-4 px-2 py-4'
         style={{ width: '340px' }}
