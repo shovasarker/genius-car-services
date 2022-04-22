@@ -11,6 +11,8 @@ import NotFound from './pages/NotFound'
 import Login from './pages/Login/Login'
 import Register from './pages/Login/Register'
 import RequireAuth from './pages/Shared/RequireAuth'
+import AddService from './pages/AddService'
+import ManageServices from './pages/ManageServices'
 
 function App() {
   return (
@@ -23,6 +25,22 @@ function App() {
           element={
             <RequireAuth>
               <ServiceDetail />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/addservice'
+          element={
+            <RequireAuth>
+              <AddService />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/manage'
+          element={
+            <RequireAuth>
+              <ManageServices />
             </RequireAuth>
           }
         />

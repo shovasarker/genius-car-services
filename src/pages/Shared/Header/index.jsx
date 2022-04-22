@@ -40,14 +40,22 @@ const Header = () => {
               About
             </Nav.Link>
             {user ? (
-              <Button
-                onClick={() => signOut(auth)}
-                variant={'outline-primary'}
-                className='mt-3 mt-lg-0 ms-lg-2'
-                style={{ width: '100px' }}
-              >
-                Sign Out
-              </Button>
+              <>
+                <Nav.Link as={Link} to='/addservice'>
+                  Add
+                </Nav.Link>
+                <Nav.Link as={Link} to='/manage'>
+                  Manage
+                </Nav.Link>
+                <Button
+                  onClick={() => signOut(auth)}
+                  variant={'outline-primary'}
+                  className='mt-3 mt-lg-0 ms-lg-2'
+                  style={{ width: '100px' }}
+                >
+                  Sign Out
+                </Button>
+              </>
             ) : (
               <Nav.Link as={Link} to='/login'>
                 Login
