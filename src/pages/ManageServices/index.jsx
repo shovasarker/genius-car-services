@@ -8,7 +8,7 @@ const ManageServices = () => {
       'Are you Sure ? You want to delete the Service ?'
     )
     if (proceed) {
-      fetch(`http://localhost:5000/service/${id}`, {
+      fetch(`https://gcs-server.herokuapp.com/service/${id}`, {
         method: 'DELETE',
       })
         .then((res) => res.json())
