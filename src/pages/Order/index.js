@@ -1,16 +1,26 @@
-import axios from 'axios'
+import { signOut } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { useNavigate } from 'react-router-dom'
+import axiosPrivate from '../../api/axiosPrivate'
 import auth from '../../firebase/firebase.init'
 
 const Order = () => {
   const [user] = useAuthState(auth)
   const [orders, setOrders] = useState([])
+  const navigate = useNavigate()
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/order?email=${user?.email}`)
+    axiosPrivate
+      .get(`https://gcs-server.herokuapp.com/order?email=${user?.email}`)
       .then((res) => setOrders(res.data))
-  }, [user?.email])
+      .catch((error) => {
+        console.log(error)
+        if (error.response.status === 403 || error.response.status === 401) {
+          signOut(auth)
+          navigate('/login')
+        }
+      })
+  }, [user, navigate])
   return (
     <div className='d-flex flex-column flex-lg-row'>
       {orders?.map((item) => {

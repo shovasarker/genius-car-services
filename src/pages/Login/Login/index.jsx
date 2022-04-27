@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import axios from 'axios'
 import { Button, Container, Form } from 'react-bootstrap'
 import {
   useAuthState,
@@ -24,22 +25,27 @@ const Login = () => {
 
   const location = useLocation()
   const from = location?.state?.from?.pathname || '/'
+
   useEffect(() => {
-    if (user || emailUser) navigate(from, { replace: true })
+    if (user || emailUser) {
+    }
   }, [user, emailUser, navigate, from])
 
   if (loading) {
     return <Loading />
   }
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     const email = emailRef.current.value
     const password = passwordRef.current.value
 
     if (!email || !password) return
 
-    signInWithEmailAndPassword(email, password)
+    await signInWithEmailAndPassword(email, password)
+    const { data } = await axios.post('http://localhost:5000/login', { email })
+    localStorage.setItem('accessToken', data.accessToken)
+    navigate(from, { replace: true })
   }
 
   const handleResetPassword = async () => {

@@ -22,7 +22,7 @@ const Checkout = () => {
       phone: e.target.phone.value,
     }
 
-    axios.post('http://localhost:5000/order', order).then((res) => {
+    axios.post('https://gcs-server.herokuapp.com/order', order).then((res) => {
       const { data } = res
       if (data?.insertedId) {
         toast('Your Order is Booked!!!')

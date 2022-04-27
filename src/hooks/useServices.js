@@ -5,7 +5,7 @@ const useServices = () => {
 
   useEffect(() => {
     const getServices = async () => {
-      const res = await fetch('http://localhost:5000/services')
+      const res = await fetch('https://gcs-server.herokuapp.com/services')
       const data = await res.json()
       setServices(data)
     }
