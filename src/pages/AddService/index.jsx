@@ -1,10 +1,12 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const AddService = () => {
   const { register, handleSubmit } = useForm()
+  const navigate = useNavigate()
   const onSubmit = (data) => {
-    console.log(data)
     const url = 'https://gcs-server.herokuapp.com/service'
     fetch(url, {
       method: 'POST',
@@ -14,7 +16,12 @@ const AddService = () => {
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        if (data.insertedId) {
+          toast.success('New service has been added')
+          navigate('/')
+        }
+      })
   }
 
   return (
@@ -26,27 +33,31 @@ const AddService = () => {
       >
         <input
           placeholder='Name'
-          className='mt-3'
-          {...register('name', { required: true, maxLength: 20 })}
+          className='px-2 py-1 rounded mt-3 border'
+          {...register('name', { required: true, maxLength: 30 })}
         />
         <textarea
           placeholder='Description'
-          className='mt-3'
+          className='px-2 py-1 rounded mt-3 border'
           {...register('description')}
         />
         <input
           placeholder='Price'
-          className='mt-3'
+          className='px-2 py-1 rounded mt-3 border'
           type='number'
           {...register('price')}
         />
         <input
           placeholder='Photo URL'
-          className='mt-3'
+          className='px-2 py-1 rounded mt-3 border'
           type={'text'}
           {...register('img')}
         />
-        <input className='mt-3' type='submit' value={'Add Service'} />
+        <input
+          className='px-2 py-1 rounded border mt-3'
+          type='submit'
+          value={'Add Service'}
+        />
       </form>
     </div>
   )

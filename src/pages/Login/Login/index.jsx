@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import axios from 'axios'
 import { Button, Container, Form } from 'react-bootstrap'
 import {
   useAuthState,
@@ -7,11 +6,12 @@ import {
   useSignInWithEmailAndPassword,
 } from 'react-firebase-hooks/auth'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import auth from '../../../firebase/firebase.init'
 import Loading from '../../Shared/Loading'
 import PageTitle from '../../Shared/PageTitle'
 import SocialLogin from '../SocialLogin'
+import useToken from '../../../hooks/useToken'
 
 const Login = () => {
   const emailRef = useRef('')
@@ -22,14 +22,19 @@ const Login = () => {
 
   const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth)
   const [user] = useAuthState(auth)
+  const [token] = useToken(user)
 
   const location = useLocation()
   const from = location?.state?.from?.pathname || '/'
 
   useEffect(() => {
-    if (user || emailUser) {
+    if (token) {
+      navigate(from, { replace: true })
     }
-  }, [user, emailUser, navigate, from])
+    if (emailUser && !token) {
+      toast.success('Logged in Successfully with Email')
+    }
+  }, [token, navigate, from, emailUser])
 
   if (loading) {
     return <Loading />
@@ -43,12 +48,6 @@ const Login = () => {
     if (!email || !password) return
 
     await signInWithEmailAndPassword(email, password)
-    const { data } = await axios.post(
-      'https://gcs-server.herokuapp.com/login',
-      { email }
-    )
-    localStorage.setItem('accessToken', data.accessToken)
-    navigate(from, { replace: true })
   }
 
   const handleResetPassword = async () => {
@@ -112,7 +111,6 @@ const Login = () => {
           </Button>
         </div>
         <SocialLogin emailError={error} />
-        <ToastContainer position='top-center' />
       </div>
     </Container>
   )

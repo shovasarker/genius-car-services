@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
+  useAuthState,
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from 'react-firebase-hooks/auth'
@@ -9,6 +10,8 @@ import auth from '../../../firebase/firebase.init.js'
 import SocialLogin from '../SocialLogin'
 import Loading from '../../Shared/Loading/index.jsx'
 import PageTitle from '../../Shared/PageTitle/index.jsx'
+import useToken from '../../../hooks/useToken.js'
+import { toast } from 'react-toastify'
 
 const Register = () => {
   const [agree, setAgree] = useState(false)
@@ -16,16 +19,22 @@ const Register = () => {
   const emailRef = useRef('')
   const passwordRef = useRef('')
   const navigate = useNavigate()
+  const [user] = useAuthState(auth)
 
-  const [createUserWithEmailAndPAssword, user, loading, error] =
+  const [createUserWithEmailAndPAssword, emailUser, loading, error] =
     useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true })
+  const [token] = useToken(user)
 
   const [updateProfile] = useUpdateProfile(auth)
 
-  if (user) {
-    console.log(user?.user)
-    navigate('/')
-  }
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+    if (emailUser && !token) {
+      toast.success('Sign Up Successfully with Email')
+    }
+  }, [token, navigate, emailUser])
 
   if (loading) {
     return <Loading />

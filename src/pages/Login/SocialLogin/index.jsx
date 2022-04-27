@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaGithub, FaFacebookSquare } from 'react-icons/fa'
 import { Button } from 'react-bootstrap'
@@ -7,18 +7,20 @@ import {
   useSignInWithGoogle,
 } from 'react-firebase-hooks/auth'
 import auth from '../../../firebase/firebase.init'
-import { useNavigate } from 'react-router-dom'
 import Loading from '../../Shared/Loading'
+import { toast } from 'react-toastify'
 
 const SocialLogin = ({ emailError }) => {
-  const navigate = useNavigate()
-  const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth)
+  const [signInWithGoogle, googleUser, loading, error] =
+    useSignInWithGoogle(auth)
   const [signInWithGithub, githubUser, githubLoading, githubError] =
     useSignInWithGithub(auth)
 
-  if (user || githubUser) {
-    navigate('/')
-  }
+  useEffect(() => {
+    if (googleUser || githubUser) {
+      toast.success('SocialLogin is Successful')
+    }
+  }, [googleUser, githubUser])
 
   if (loading || githubLoading) {
     return <Loading />
